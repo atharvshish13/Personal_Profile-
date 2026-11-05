@@ -53,13 +53,14 @@ Open [http://localhost:3000](http://localhost:3000) to view the live website.
 
 ## ✉️ Contact Email Setup
 
-The contact form uses a server-side Next.js route and Resend. Static export is disabled, so deploy to a server-capable Next.js host such as Vercel or a Node.js server.
+The contact form uses a server-side Next.js route and Resend, so it needs server-capable hosting. GitHub Pages cannot run the email API; deploy this project on Vercel instead.
 
 1. Create a Resend API key and verify the domain used for the sender address.
-2. Copy `.env.example` to `.env.local` and set `RESEND_API_KEY`, `RESEND_FROM_EMAIL`, and `CONTACT_TO_EMAIL`.
-3. Add those same environment variables to your hosting provider. Keep the API key private; never use a `NEXT_PUBLIC_` prefix.
+2. Import `atharvshish13/Personal_Profile-` into Vercel as a Next.js project.
+3. In the Vercel project settings, add `RESEND_API_KEY`, `RESEND_FROM_EMAIL`, and `CONTACT_TO_EMAIL` for Production and Preview. Use the values in `.env.example` as a template.
+4. Add `www.atharvshish.in` in Vercel's Domains settings and follow its DNS instructions.
 
-The form sends the inquiry to `CONTACT_TO_EMAIL` and sends a separate receipt to the visitor.
+Keep the Resend API key private; never use a `NEXT_PUBLIC_` prefix. The form sends the inquiry to `CONTACT_TO_EMAIL` and sends a separate receipt to the visitor. Connect the GitHub repository to Vercel to deploy future pushes automatically.
 
 ## 📦 Production Build
 
