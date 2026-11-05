@@ -1,5 +1,6 @@
 'use client';
 import { Globe, Mail, Heart } from 'lucide-react';
+import Image from 'next/image';
 import { GithubIcon, LinkedinIcon, InstagramIcon } from './SocialIcons';
 
 const navLinks = [
@@ -38,11 +39,21 @@ export default function Footer() {
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
               <div style={{
-                width: 42, height: 42, borderRadius: 12,
-                background: 'linear-gradient(135deg, #2563EB, #7C3AED)',
+                position: 'relative',
+                width: 48, height: 36,
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: 16, fontWeight: 900, color: 'white',
-              }}>AB</div>
+              }}>
+                <Image
+                  src="/logo-transparent.png"
+                  alt="Atharvshish Barwat Monogram Logo"
+                  width={48}
+                  height={36}
+                  style={{
+                    objectFit: 'contain',
+                    filter: 'brightness(0) invert(1)',
+                  }}
+                />
+              </div>
               <div>
                 <div style={{ fontWeight: 800, fontSize: 16, color: '#FFFFFF', letterSpacing: '-0.3px' }}>ATHARVSHISH BARWAT</div>
                 <div style={{ fontSize: 12, color: '#38BDF8', fontWeight: 500, marginTop: 2 }}>Full Stack Developer | AI &amp; ML Student</div>

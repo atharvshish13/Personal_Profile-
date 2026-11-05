@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, Sun, Moon, Download } from 'lucide-react';
+import Image from 'next/image';
 import { useTheme } from './ThemeProvider';
 
 const navLinks = [
@@ -65,15 +66,26 @@ export default function Navbar() {
           href="#home"
           onClick={e => { e.preventDefault(); scrollTo('#home'); }}
           whileHover={{ scale: 1.05 }}
-          style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 10 }}
+          style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 12 }}
         >
           <div style={{
-            width: 36, height: 36, borderRadius: 10,
-            background: 'linear-gradient(135deg, #2563EB, #7C3AED)',
+            position: 'relative',
+            width: 44, height: 32,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: 14, fontWeight: 800, color: 'white', letterSpacing: '-0.5px',
-          }}>AB</div>
-          <span style={{ fontWeight: 700, fontSize: 15, color: 'var(--text)', letterSpacing: '-0.3px' }}>
+          }}>
+            <Image
+              src="/logo-transparent.png"
+              alt="Atharvshish Barwat Monogram Logo"
+              width={44}
+              height={32}
+              priority
+              style={{
+                objectFit: 'contain',
+                filter: theme === 'dark' ? 'brightness(0) invert(1)' : 'none',
+              }}
+            />
+          </div>
+          <span style={{ fontWeight: 800, fontSize: 16, color: 'var(--text)', letterSpacing: '-0.3px' }}>
             Atharvshish
           </span>
         </motion.a>

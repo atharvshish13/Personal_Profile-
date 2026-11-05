@@ -145,6 +145,25 @@ export default function Hero() {
         padding: 0,
       }}
     >
+      {/* Ambient background video */}
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        src="/bg-video.mp4"
+        style={{
+          position: 'absolute',
+          inset: 0,
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+          opacity: 0.18,
+          zIndex: 0,
+          filter: 'contrast(1.2) brightness(0.7)',
+        }}
+      />
+
       {/* Canvas for fine digital particles */}
       <canvas ref={canvasRef} style={{ position: 'absolute', inset: 0, zIndex: 1 }} />
 
