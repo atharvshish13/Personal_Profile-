@@ -485,7 +485,7 @@ export default function Hero() {
               priority
               style={{
                 objectFit: 'cover',
-                objectPosition: 'center 15%',
+                objectPosition: '75% 15%',
               }}
             />
 
