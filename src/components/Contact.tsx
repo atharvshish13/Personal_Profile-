@@ -7,16 +7,20 @@ import { GithubIcon, LinkedinIcon, InstagramIcon } from './SocialIcons';
 
 export default function Contact() {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
-  const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' });
+  const [form, setForm] = useState({ name: '', email: '', subject: '', message: '', website: '' });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
+  const [feedback, setFeedback] = useState('');
+  const [confirmationSent, setConfirmationSent] = useState(false);
 
   const validate = () => {
     const e: Record<string, string> = {};
-    if (!form.name.trim()) e.name = 'Name is required';
-    if (!form.email.trim() || !/\S+@\S+\.\S+/.test(form.email)) e.email = 'Valid email required';
-    if (!form.subject.trim()) e.subject = 'Subject is required';
-    if (!form.message.trim() || form.message.length < 10) e.message = 'Message must be at least 10 characters';
+    if (!form.name.trim() || form.name.trim().length > 100) e.name = 'Enter a name (up to 100 characters)';
+    if (!form.email.trim() || form.email.length > 254 || !/\S+@\S+\.\S+/.test(form.email)) e.email = 'Enter a valid email address';
+    if (!form.subject.trim() || form.subject.trim().length > 200) e.subject = 'Enter a subject (up to 200 characters)';
+    if (!form.message.trim() || form.message.trim().length < 10 || form.message.length > 5000) {
+      e.message = 'Message must be between 10 and 5,000 characters';
+    }
     return e;
   };
 
@@ -25,12 +29,30 @@ export default function Contact() {
     const errs = validate();
     if (Object.keys(errs).length > 0) { setErrors(errs); return; }
     setErrors({});
+    setFeedback('');
     setStatus('sending');
-    // Simulated delivery with real visual feedback
-    await new Promise(r => setTimeout(r, 1200));
-    setStatus('success');
-    setForm({ name: '', email: '', subject: '', message: '' });
-    setTimeout(() => setStatus('idle'), 5000);
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      });
+      const result: { error?: string; confirmationSent?: boolean } = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Your message could not be delivered. Please try again.');
+      }
+
+      setConfirmationSent(Boolean(result.confirmationSent));
+      setStatus('success');
+      setForm({ name: '', email: '', subject: '', message: '', website: '' });
+    } catch (error) {
+      setStatus('error');
+      setFeedback(error instanceof Error
+        ? error.message
+        : 'Your message could not be delivered. Please try again.');
+    }
   };
 
   const socialLinks = [
@@ -233,12 +255,28 @@ export default function Contact() {
                 Send a Message
               </h3>
 
+              <div className="contact-honeypot" aria-hidden="true">
+                <label htmlFor="contact-website">Website</label>
+                <input
+                  id="contact-website"
+                  name="website"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  value={form.website}
+                  onChange={e => setForm({ ...form, website: e.target.value })}
+                />
+              </div>
+
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 16 }}>
                 <div>
-                  <label style={{ fontSize: 12, fontWeight: 600, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.1em', display: 'block', marginBottom: 8 }}>
+                  <label htmlFor="contact-name" style={{ fontSize: 12, fontWeight: 600, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.1em', display: 'block', marginBottom: 8 }}>
                     Full Name
                   </label>
                   <input
+                    id="contact-name"
+                    required
+                    maxLength={100}
+                    autoComplete="name"
                     className="form-input"
                     placeholder="Atharvshish Barwat"
                     value={form.name}
@@ -247,11 +285,15 @@ export default function Contact() {
                   {errors.name && <span style={{ fontSize: 12, color: '#EF4444', marginTop: 4, display: 'block' }}>{errors.name}</span>}
                 </div>
                 <div>
-                  <label style={{ fontSize: 12, fontWeight: 600, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.1em', display: 'block', marginBottom: 8 }}>
+                  <label htmlFor="contact-email" style={{ fontSize: 12, fontWeight: 600, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.1em', display: 'block', marginBottom: 8 }}>
                     Email
                   </label>
                   <input
+                    id="contact-email"
+                    required
                     type="email"
+                    maxLength={254}
+                    autoComplete="email"
                     className="form-input"
                     placeholder="atharvshish13@gmail.com"
                     value={form.email}
@@ -262,10 +304,13 @@ export default function Contact() {
               </div>
 
               <div style={{ marginBottom: 16 }}>
-                <label style={{ fontSize: 12, fontWeight: 600, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.1em', display: 'block', marginBottom: 8 }}>
+                <label htmlFor="contact-subject" style={{ fontSize: 12, fontWeight: 600, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.1em', display: 'block', marginBottom: 8 }}>
                   Subject
                 </label>
                 <input
+                  id="contact-subject"
+                  required
+                  maxLength={200}
                   className="form-input"
                   placeholder="Project inquiry / Opportunity..."
                   value={form.subject}
@@ -275,10 +320,14 @@ export default function Contact() {
               </div>
 
               <div style={{ marginBottom: 24 }}>
-                <label style={{ fontSize: 12, fontWeight: 600, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.1em', display: 'block', marginBottom: 8 }}>
+                <label htmlFor="contact-message" style={{ fontSize: 12, fontWeight: 600, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.1em', display: 'block', marginBottom: 8 }}>
                   Message
                 </label>
                 <textarea
+                  id="contact-message"
+                  required
+                  minLength={10}
+                  maxLength={5000}
                   className="form-input"
                   placeholder="Share details about your project or inquiry..."
                   rows={5}
@@ -288,6 +337,10 @@ export default function Contact() {
                 />
                 {errors.message && <span style={{ fontSize: 12, color: '#EF4444', marginTop: 4, display: 'block' }}>{errors.message}</span>}
               </div>
+
+              <p style={{ color: 'var(--muted)', fontSize: 12, lineHeight: 1.6, marginBottom: 16 }}>
+                Your message will be sent to Atharvshish, and a receipt will be emailed to you.
+              </p>
 
               <button
                 type="submit"
@@ -304,6 +357,8 @@ export default function Contact() {
 
               {status === 'success' && (
                 <motion.div
+                  role="status"
+                  aria-live="polite"
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   style={{
@@ -314,12 +369,15 @@ export default function Contact() {
                   }}
                 >
                   <CheckCircle2 size={18} />
-                  Message sent successfully! Thank you for reaching out.
+                  {confirmationSent
+                    ? 'Your message was delivered. A confirmation email is on its way.'
+                    : 'Your message was delivered, but we could not send the confirmation email.'}
                 </motion.div>
               )}
 
               {status === 'error' && (
                 <motion.div
+                  role="alert"
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   style={{
@@ -330,7 +388,7 @@ export default function Contact() {
                   }}
                 >
                   <AlertCircle size={18} />
-                  Something went wrong. Please email directly at atharvshish13@gmail.com
+                  {feedback || 'Something went wrong. Please email directly at atharvshish13@gmail.com'}
                 </motion.div>
               )}
             </form>

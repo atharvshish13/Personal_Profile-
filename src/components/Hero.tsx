@@ -140,17 +140,19 @@ export default function Hero() {
         position: 'relative',
         display: 'flex',
         alignItems: 'center',
-        background: '#050505',
+        background: 'var(--bg-secondary)',
         overflow: 'hidden',
         padding: 0,
       }}
     >
       {/* Ambient background video */}
       <video
+        className="hero-background-video"
         autoPlay
         loop
         muted
         playsInline
+        aria-hidden="true"
         src="/bg-video.mp4"
         style={{
           position: 'absolute',
@@ -239,7 +241,7 @@ export default function Hero() {
                 fontWeight: 900,
                 lineHeight: 0.96,
                 letterSpacing: '-2px',
-                color: '#FFFFFF',
+                color: 'var(--text)',
                 fontFamily: "'Space Grotesk', sans-serif",
                 textTransform: 'uppercase',
               }}
@@ -268,7 +270,7 @@ export default function Hero() {
             style={{
               fontSize: 19,
               fontWeight: 600,
-              color: '#E2E8F0',
+              color: 'var(--text)',
               marginBottom: 10,
             }}
           >
@@ -306,7 +308,7 @@ export default function Hero() {
             style={{
               fontSize: 15,
               lineHeight: 1.8,
-              color: '#94A3B8',
+              color: 'var(--muted)',
               maxWidth: 520,
               marginBottom: 16,
             }}
@@ -391,7 +393,7 @@ export default function Hero() {
                   justifyContent: 'center',
                   background: 'rgba(255,255,255,0.04)',
                   border: '1px solid rgba(255,255,255,0.08)',
-                  color: '#94A3B8',
+                  color: 'var(--muted)',
                   transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                   textDecoration: 'none',
                 }}
@@ -402,10 +404,10 @@ export default function Hero() {
                   (e.currentTarget as HTMLAnchorElement).style.background = 'rgba(37,99,235,0.15)';
                 }}
                 onMouseLeave={e => {
-                  (e.currentTarget as HTMLAnchorElement).style.borderColor = 'rgba(255,255,255,0.08)';
-                  (e.currentTarget as HTMLAnchorElement).style.color = '#94A3B8';
+                  (e.currentTarget as HTMLAnchorElement).style.borderColor = 'var(--border)';
+                  (e.currentTarget as HTMLAnchorElement).style.color = 'var(--muted)';
                   (e.currentTarget as HTMLAnchorElement).style.transform = 'none';
-                  (e.currentTarget as HTMLAnchorElement).style.background = 'rgba(255,255,255,0.04)';
+                  (e.currentTarget as HTMLAnchorElement).style.background = 'var(--card)';
                 }}
               >
                 <Icon size={18} />

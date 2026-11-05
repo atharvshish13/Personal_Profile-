@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { ExternalLink, X, ChevronRight } from 'lucide-react';
@@ -70,6 +70,29 @@ export default function Projects() {
   const [activeFilter, setActiveFilter] = useState('All');
   const [selectedProject, setSelectedProject] = useState<typeof projects[0] | null>(null);
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
+  const modalRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!selectedProject) return;
+
+    const previousFocus = document.activeElement instanceof HTMLElement
+      ? document.activeElement
+      : null;
+    const previousOverflow = document.body.style.overflow;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setSelectedProject(null);
+    };
+
+    document.body.style.overflow = 'hidden';
+    window.addEventListener('keydown', onKeyDown);
+    modalRef.current?.focus();
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener('keydown', onKeyDown);
+      previousFocus?.focus();
+    };
+  }, [selectedProject]);
 
   const filtered = activeFilter === 'All'
     ? projects
@@ -122,7 +145,17 @@ export default function Projects() {
                 exit={{ opacity: 0, scale: 0.9 }}
                 transition={{ duration: 0.4, delay: i * 0.07 }}
                 className="project-card"
+                role="button"
+                tabIndex={0}
+                aria-haspopup="dialog"
                 onClick={() => setSelectedProject(project)}
+                onKeyDown={event => {
+                  if (event.target !== event.currentTarget) return;
+                  if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    setSelectedProject(project);
+                  }
+                }}
                 style={{ cursor: 'pointer' }}
               >
                 {/* Project header image area */}
@@ -211,6 +244,11 @@ export default function Projects() {
           >
             <motion.div
               className="modal-content"
+              ref={modalRef}
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="project-dialog-title"
+              tabIndex={-1}
               initial={{ scale: 0.9, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.9, opacity: 0 }}
@@ -218,9 +256,10 @@ export default function Projects() {
             >
               <button
                 onClick={() => setSelectedProject(null)}
+                aria-label="Close project details"
                 style={{
                   position: 'absolute', top: 20, right: 20,
-                  background: 'rgba(255,255,255,0.08)', border: 'none',
+                  background: 'var(--bg-secondary)', border: '1px solid var(--border)',
                   borderRadius: 8, width: 32, height: 32, cursor: 'pointer',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   color: 'var(--muted)',
@@ -233,7 +272,7 @@ export default function Projects() {
               <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--accent)', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: 8 }}>
                 {selectedProject.category}
               </div>
-              <h3 style={{ fontSize: 28, fontWeight: 800, color: 'var(--text)', marginBottom: 16 }}>
+              <h3 id="project-dialog-title" style={{ fontSize: 28, fontWeight: 800, color: 'var(--text)', marginBottom: 16 }}>
                 {selectedProject.title}
               </h3>
               <span style={{

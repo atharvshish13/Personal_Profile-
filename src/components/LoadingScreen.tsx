@@ -87,6 +87,9 @@ export default function LoadingScreen() {
           position: 'relative',
           width: 140,
           height: 100,
+          padding: 8,
+          borderRadius: 16,
+          background: '#ffffff',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -94,15 +97,12 @@ export default function LoadingScreen() {
           animation: 'logoPulse 2s ease-in-out infinite',
         }}>
           <Image
-            src="/logo-transparent.png"
+            src="/logo.png"
             alt="Atharvshish Barwat Logo"
             width={140}
             height={100}
             priority
-            style={{
-              objectFit: 'contain',
-              filter: 'brightness(0) invert(1)',
-            }}
+            style={{ objectFit: 'contain' }}
           />
         </div>
 

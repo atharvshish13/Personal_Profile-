@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { Award, X, Search } from 'lucide-react';
@@ -74,6 +74,29 @@ export default function Certificates() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selected, setSelected] = useState<typeof certificates[0] | null>(null);
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
+  const modalRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!selected) return;
+
+    const previousFocus = document.activeElement instanceof HTMLElement
+      ? document.activeElement
+      : null;
+    const previousOverflow = document.body.style.overflow;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setSelected(null);
+    };
+
+    document.body.style.overflow = 'hidden';
+    window.addEventListener('keydown', onKeyDown);
+    modalRef.current?.focus();
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener('keydown', onKeyDown);
+      previousFocus?.focus();
+    };
+  }, [selected]);
 
   const filtered = certificates.filter(c => {
     const matchCat = activeCategory === 'All' || c.category === activeCategory;
@@ -140,7 +163,17 @@ export default function Certificates() {
                 exit={{ opacity: 0, scale: 0.9 }}
                 transition={{ duration: 0.4, delay: i * 0.06 }}
                 className="cert-card"
+                role="button"
+                tabIndex={0}
+                aria-haspopup="dialog"
                 onClick={() => setSelected(cert)}
+                onKeyDown={event => {
+                  if (event.target !== event.currentTarget) return;
+                  if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    setSelected(cert);
+                  }
+                }}
               >
                 <div style={{
                   height: 120, display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -183,6 +216,11 @@ export default function Certificates() {
           >
             <motion.div
               className="modal-content"
+              ref={modalRef}
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="certificate-dialog-title"
+              tabIndex={-1}
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
@@ -190,9 +228,10 @@ export default function Certificates() {
             >
               <button
                 onClick={() => setSelected(null)}
+                aria-label="Close certificate details"
                 style={{
                   position: 'absolute', top: 20, right: 20,
-                  background: 'rgba(255,255,255,0.08)', border: 'none',
+                  background: 'var(--bg-secondary)', border: '1px solid var(--border)',
                   borderRadius: 8, width: 32, height: 32, cursor: 'pointer',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   color: 'var(--muted)',
@@ -208,7 +247,7 @@ export default function Certificates() {
                 fontSize: 12, fontWeight: 600, color: selected.categoryColor,
               }}>{selected.category}</span>
 
-              <h3 style={{ fontSize: 24, fontWeight: 800, color: 'var(--text)', marginBottom: 8 }}>{selected.title}</h3>
+              <h3 id="certificate-dialog-title" style={{ fontSize: 24, fontWeight: 800, color: 'var(--text)', marginBottom: 8 }}>{selected.title}</h3>
               <p style={{ fontSize: 14, color: 'var(--accent)', marginBottom: 20, fontWeight: 500 }}>{selected.issuer}</p>
               <p style={{ fontSize: 15, lineHeight: 1.8, color: 'var(--muted)', marginBottom: 24 }}>{selected.description}</p>
 
@@ -234,4 +273,3 @@ export default function Certificates() {
     </section>
   );
 }
-

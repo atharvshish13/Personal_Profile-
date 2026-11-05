@@ -29,7 +29,7 @@ A world-class, cinematic, and responsive personal portfolio built with **Next.js
 - **Achievements**: Eased real-time counter statistics.
 - **Services**: Web Development, Android Apps, Full Stack, AI Solutions, API Integration, and Automation.
 - **Building The Future with AI**: Dedicated AI/ML journey and future tech goals.
-- **Contact Form & Location**: Functional interactive contact form, dark-mode Google Map of Amravati, and direct Instagram connection.
+- **Contact Form & Location**: Server-delivered contact messages and visitor confirmations through Resend, Google Map of Amravati, and direct Instagram connection.
 
 ---
 
@@ -51,13 +51,23 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) to view the live website.
 
-## 📦 Build & Static Export
+## ✉️ Contact Email Setup
+
+The contact form uses a server-side Next.js route and Resend. Static export is disabled, so deploy to a server-capable Next.js host such as Vercel or a Node.js server.
+
+1. Create a Resend API key and verify the domain used for the sender address.
+2. Copy `.env.example` to `.env.local` and set `RESEND_API_KEY`, `RESEND_FROM_EMAIL`, and `CONTACT_TO_EMAIL`.
+3. Add those same environment variables to your hosting provider. Keep the API key private; never use a `NEXT_PUBLIC_` prefix.
+
+The form sends the inquiry to `CONTACT_TO_EMAIL` and sends a separate receipt to the visitor.
+
+## 📦 Production Build
 
 ```bash
 npm run build
 ```
 
-Exports pre-rendered static HTML, CSS, and JS to the `/out` directory.
+The build produces a Next.js application that must run on a server-capable host for the contact form API to work.
 
 ---
 

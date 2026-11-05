@@ -48,14 +48,14 @@ export default function Navbar() {
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: 'easeOut' }}
         style={{
-          position: 'fixed', top: 16, left: '50%', transform: 'translateX(-50%)',
-          zIndex: 1000, width: 'calc(100% - 48px)', maxWidth: 1100,
+          position: 'fixed', top: 16, left: 24, right: 24, margin: '0 auto',
+          zIndex: 1000, width: 'auto', maxWidth: 1100,
           borderRadius: 16,
           background: scrolled
-            ? theme === 'dark' ? 'rgba(5,5,5,0.9)' : 'rgba(255,255,255,0.9)'
+            ? theme === 'dark' ? 'rgba(5,5,5,0.9)' : 'rgba(255,255,255,0.92)'
             : 'transparent',
           backdropFilter: scrolled ? 'blur(20px)' : 'none',
-          border: scrolled ? '1px solid rgba(255,255,255,0.08)' : '1px solid transparent',
+          border: scrolled ? '1px solid var(--border)' : '1px solid transparent',
           transition: 'all 0.4s ease',
           padding: '12px 24px',
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
@@ -70,19 +70,19 @@ export default function Navbar() {
         >
           <div style={{
             position: 'relative',
-            width: 44, height: 32,
+            width: 48, height: 38,
+            borderRadius: 10,
+            background: 'var(--card)',
+            border: '1px solid var(--border)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
           }}>
             <Image
-              src="/logo-transparent.png"
+              src="/logo.png"
               alt="Atharvshish Barwat Monogram Logo"
               width={44}
-              height={32}
+              height={34}
               priority
-              style={{
-                objectFit: 'contain',
-                filter: theme === 'dark' ? 'brightness(0) invert(1)' : 'none',
-              }}
+              style={{ objectFit: 'contain' }}
             />
           </div>
           <span style={{ fontWeight: 800, fontSize: 16, color: 'var(--text)', letterSpacing: '-0.3px' }}>
@@ -116,8 +116,10 @@ export default function Navbar() {
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <button
             onClick={toggleTheme}
+            aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
+            title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
             style={{
-              background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)',
+              background: 'var(--card)', border: '1px solid var(--border)',
               borderRadius: 8, width: 36, height: 36,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               cursor: 'pointer', color: 'var(--muted)', transition: 'all 0.2s ease',
@@ -144,8 +146,9 @@ export default function Navbar() {
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
             className="show-mobile"
+            aria-label={mobileOpen ? 'Close navigation menu' : 'Open navigation menu'}
             style={{
-              background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)',
+              background: 'var(--card)', border: '1px solid var(--border)',
               borderRadius: 8, width: 36, height: 36,
               display: 'none', alignItems: 'center', justifyContent: 'center',
               cursor: 'pointer', color: 'var(--text)',
@@ -165,7 +168,7 @@ export default function Navbar() {
             exit={{ opacity: 0 }}
             style={{
               position: 'fixed', inset: 0,
-              background: 'rgba(5,5,5,0.97)',
+              background: theme === 'dark' ? 'rgba(5,5,5,0.97)' : 'rgba(255,255,255,0.97)',
               backdropFilter: 'blur(20px)',
               zIndex: 999, display: 'flex',
               flexDirection: 'column', alignItems: 'center',
@@ -217,4 +220,3 @@ export default function Navbar() {
     </>
   );
 }
-

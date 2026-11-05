@@ -1,5 +1,5 @@
 'use client';
-import { Globe, Mail, Heart } from 'lucide-react';
+import { Globe, Mail } from 'lucide-react';
 import Image from 'next/image';
 import { GithubIcon, LinkedinIcon, InstagramIcon } from './SocialIcons';
 
@@ -29,8 +29,8 @@ export default function Footer() {
 
   return (
     <footer style={{
-      background: '#030303',
-      borderTop: '1px solid rgba(255,255,255,0.06)',
+      background: 'var(--bg-secondary)',
+      borderTop: '1px solid var(--border)',
       padding: '70px 24px 36px',
     }}>
       <div style={{ maxWidth: 1200, margin: '0 auto' }}>
@@ -40,36 +40,36 @@ export default function Footer() {
             <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
               <div style={{
                 position: 'relative',
-                width: 48, height: 36,
+                width: 52, height: 42,
+                borderRadius: 10,
+                background: '#fff',
+                border: '1px solid var(--border)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
               }}>
                 <Image
-                  src="/logo-transparent.png"
+                  src="/logo.png"
                   alt="Atharvshish Barwat Monogram Logo"
                   width={48}
                   height={36}
-                  style={{
-                    objectFit: 'contain',
-                    filter: 'brightness(0) invert(1)',
-                  }}
+                  style={{ objectFit: 'contain' }}
                 />
               </div>
               <div>
-                <div style={{ fontWeight: 800, fontSize: 16, color: '#FFFFFF', letterSpacing: '-0.3px' }}>ATHARVSHISH BARWAT</div>
-                <div style={{ fontSize: 12, color: '#38BDF8', fontWeight: 500, marginTop: 2 }}>Full Stack Developer | AI &amp; ML Student</div>
+                <div style={{ fontWeight: 800, fontSize: 16, color: 'var(--text)', letterSpacing: '-0.3px' }}>ATHARVSHISH BARWAT</div>
+                <div style={{ fontSize: 12, color: 'var(--accent)', fontWeight: 500, marginTop: 2 }}>Full Stack Developer | AI &amp; ML Student</div>
               </div>
             </div>
-            <p style={{ fontSize: 14, color: '#94A3B8', lineHeight: 1.8, maxWidth: 320 }}>
+            <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.8, maxWidth: 320 }}>
               &ldquo;Dream. Build. Create The Future.&rdquo;
             </p>
-            <p style={{ fontSize: 13, color: '#64748B', lineHeight: 1.7, maxWidth: 320, marginTop: 8 }}>
+            <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7, maxWidth: 320, marginTop: 8 }}>
               Engineering modern digital experiences, intelligent applications, and scalable software solutions.
             </p>
           </div>
 
           {/* Quick Navigation */}
           <div>
-            <div style={{ fontSize: 11, fontWeight: 700, color: '#38BDF8', textTransform: 'uppercase', letterSpacing: '0.18em', marginBottom: 20 }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--accent)', textTransform: 'uppercase', letterSpacing: '0.18em', marginBottom: 20 }}>
               Navigation
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
@@ -80,11 +80,11 @@ export default function Footer() {
                   style={{
                     background: 'none', border: 'none', cursor: 'pointer',
                     textAlign: 'left', padding: 0,
-                    fontSize: 14, color: '#94A3B8', fontFamily: 'inherit',
+                    fontSize: 14, color: 'var(--muted)', fontFamily: 'inherit',
                     transition: 'color 0.2s ease',
                   }}
-                  onMouseEnter={e => { (e.target as HTMLButtonElement).style.color = '#38BDF8'; }}
-                  onMouseLeave={e => { (e.target as HTMLButtonElement).style.color = '#94A3B8'; }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.color = 'var(--accent)'; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.color = 'var(--muted)'; }}
                 >
                   {l.label}
                 </button>
@@ -94,7 +94,7 @@ export default function Footer() {
 
           {/* Social Presence */}
           <div>
-            <div style={{ fontSize: 11, fontWeight: 700, color: '#38BDF8', textTransform: 'uppercase', letterSpacing: '0.18em', marginBottom: 20 }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--accent)', textTransform: 'uppercase', letterSpacing: '0.18em', marginBottom: 20 }}>
               Connect &amp; Socials
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
@@ -105,15 +105,15 @@ export default function Footer() {
                   target="_blank" rel="noopener noreferrer"
                   style={{
                     display: 'flex', alignItems: 'center', gap: 10,
-                    fontSize: 14, color: '#94A3B8', textDecoration: 'none',
+                    fontSize: 14, color: 'var(--muted)', textDecoration: 'none',
                     transition: 'all 0.2s ease',
                   }}
                   onMouseEnter={e => {
-                    (e.currentTarget as HTMLAnchorElement).style.color = '#38BDF8';
+                    (e.currentTarget as HTMLAnchorElement).style.color = 'var(--accent)';
                     (e.currentTarget as HTMLAnchorElement).style.transform = 'translateX(4px)';
                   }}
                   onMouseLeave={e => {
-                    (e.currentTarget as HTMLAnchorElement).style.color = '#94A3B8';
+                    (e.currentTarget as HTMLAnchorElement).style.color = 'var(--muted)';
                     (e.currentTarget as HTMLAnchorElement).style.transform = 'none';
                   }}
                 >
@@ -125,14 +125,14 @@ export default function Footer() {
         </div>
 
         {/* Subtle separator */}
-        <div style={{ height: 1, background: 'rgba(255,255,255,0.06)', marginBottom: 24 }} />
+        <div style={{ height: 1, background: 'var(--border)', marginBottom: 24 }} />
 
         {/* Footer legal & copyright */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12 }}>
-          <span style={{ fontSize: 13, color: '#64748B' }}>
+          <span style={{ fontSize: 13, color: 'var(--muted)' }}>
             © 2026 Atharvshish Barwat. All Rights Reserved.
           </span>
-          <span style={{ fontSize: 13, color: '#64748B', display: 'flex', alignItems: 'center', gap: 6 }}>
+          <span style={{ fontSize: 13, color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: 6 }}>
             Designed with precision &bull; Built with Next.js &amp; Tailwind
           </span>
         </div>
